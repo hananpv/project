@@ -114,8 +114,8 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background: linear-gradient(45deg, #dc3545, #ff4757);
-  color: white;
+  background: linear-gradient(45deg, #ffffff, #ffffff);
+  color: rgb(0, 0, 0);
   font-size: 0.7rem;
   padding: 4px 7px;
   border-radius: 50%;

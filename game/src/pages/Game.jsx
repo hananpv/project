@@ -27,7 +27,7 @@ function Game() {
     const fetchGames = async () => {
       try {
         const res = await api.get('/games');
-        setGames(Array.isArray(res.data) ? res.data : []);
+        setGames(Array.isArray(res.data) ? res.data : []); 
       } catch (error) {
         console.error('Failed to load games:', error);
       } finally {
@@ -37,7 +37,7 @@ function Game() {
 
     fetchGames();
   }, []);
-
+  
   const filteredGames = selectedCategory
     ? games.filter(
         game =>
@@ -86,10 +86,10 @@ function Game() {
                       wishlisted
                         ? removeFromWishlist(game.id)
                         : addToWishlist(game)
-                    }
+                    } 
                   >
                     {wishlisted ? '♥' : '♡'}
-                  </button>
+                      </button>
                 </div>
 
                 <div className="game-info">
@@ -122,7 +122,8 @@ function Game() {
                       onClick={() => addToCart(game)}
                     >
                       Buy Now
-                    </button>
+                    </button>.
+                                                                                                                                                                                                                                                                                                                                                                                         
             
                   </div>
                 </div>

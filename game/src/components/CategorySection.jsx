@@ -25,7 +25,7 @@ const CategorySection = () => {
       image: "products/storymod.jpg"
     },
     {
-      name: "Car Games",
+      name: "Racing",
       
       description: "High-speed racing and driving",
       image: "products/racing.jpg"

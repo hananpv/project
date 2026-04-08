@@ -76,7 +76,7 @@ const Navbar = () => {
                 </button>
 
                 <div className="dropdown-menu">
-                  <Link to="/profile" className="dropdown-item">Profile</Link>
+                  <Link to="/Profile" className="dropdown-item">Profile</Link>
                   <button
                     onClick={handleLogout}
                     className="dropdown-item logout"

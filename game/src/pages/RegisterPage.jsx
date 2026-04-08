@@ -3,6 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/Axios"; 
 import { useAuth } from "../context/AuthContext";
 import "../css/RegisterPage.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -18,7 +22,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+    
     if (!username || !email || !password || !confirmPassword) {
       setError("All fields are required");
       return;
@@ -54,7 +58,7 @@ const RegisterPage = () => {
         password
       });
 
-      alert("Registration successful! Please login.");
+      toast("Registration successful! Please login.");
       navigate("/login");
 
     } catch (err) {
@@ -74,28 +78,28 @@ const RegisterPage = () => {
         {error && <p className="error">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-
+                                            
           <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-
+                                              
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-
+                                                     
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
+                                                       
           <input
             type="password"
             placeholder="Confirm Password"

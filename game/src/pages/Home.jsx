@@ -8,13 +8,13 @@ import '../css/Home.css';
 
 const Home = () => {
  
-  // useEffect(() => {
-  //   const particles = document.querySelectorAll('.particle');
-  //   particles.forEach(particle => {
-  //     particle.style.left = `${Math.random() * 100}%`;
-  //     particle.style.top = `${Math.random() * 100}%`;
-  //   });
-  // }, []);
+  useEffect(() => {
+    const particles = document.querySelectorAll('.particle');
+    particles.forEach(particle => {
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+    });
+  }, []);
 
   return (
     <div className="home-page">
@@ -26,7 +26,6 @@ const Home = () => {
       <div className="glow-orb glow-orb-1"></div>
       <div className="glow-orb glow-orb-2"></div>
       
-   
       <div className="scroll-progress"></div>
 
      

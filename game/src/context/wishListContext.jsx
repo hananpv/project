@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { api } from '../api/Axios';
+import { toast } from 'react-toastify';
 
 const WishlistContext = createContext(null);
 export const useWishlist = () => useContext(WishlistContext);
@@ -21,7 +22,7 @@ export const WishlistProvider = ({ children }) => {
  
   const addToWishlist = async (product) => {
     if (!isAuthenticated) {
-      alert('Please login to add to wishlist');
+      toast('Please login to add to wishlist');
       return;
     }
 

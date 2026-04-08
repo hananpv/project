@@ -1,0 +1,66 @@
+/* Container */
+.orders {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* Title */
+.orders h2 {
+  color: #9333ea;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Table */
+.orders table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header */
+.orders th {
+  background: #faf5ff;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #4c1d95;
+}
+
+/* Rows */
+.orders td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+/* Hover effect */
+.orders tr:hover {
+  background: #f9fafb;
+}
+
+/* Status Styling */
+.orders td:last-child {
+  font-weight: bold;
+  color: green;
+}
+
+/* Empty message */
+.orders td[colspan] {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .orders table {
+    font-size: 14px;
+  }
+
+  .orders th,
+  .orders td {
+    padding: 8px;
+  }
+}

@@ -292,6 +292,14 @@ body {
 .text-success {
   color: #00b894;
 }
+/* 🔥 Toast Glass Effect */
+.custom-toast {
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  color: #636363;
+  border: 1px solid rgba(255,255,255,0.2);
+}
 
 /* Margin & Padding Utilities */
 .mt-1 { margin-top: 0.5rem; }

@@ -34,8 +34,8 @@ const Footer = () => {
 
           <div className="footer-links">
             <h3>Support</h3>
-            <h5>NUMBER:1111111111</h5>
-             <h5>EMAIL:pixel@gmail.com</h5>
+            <h5>NUMBER:12121212</h5>
+             <h5>EMAIL:pixelvault@gmail.com</h5>
           </div>
 
          
@@ -55,11 +55,11 @@ const Footer = () => {
             </div>
             <div className="contact-item">
               <span className="contact-label">Phone:</span>
-              <span className="contact-value">+1 (555) 123-4567</span>
+              <span className="contact-value">+91 000-080-0008</span>
             </div>
             <div className="contact-item">
               <span className="contact-label">Address:</span>
-              <span className="contact-value">123 Gaming Street, Virtual City, VC 10101</span>
+              <span className="contact-value">_________,_________,__________</span>
             </div>
           </div>
 

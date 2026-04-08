@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
@@ -8,68 +9,93 @@ const Cart = () => {
 
   const {
     cart,
+    increaseQuantity,
+    decreaseQuantity,
     removeFromCart,
-    updateQuantity,
     getTotalPrice,
     clearCart
   } = useCart();
 
-  if (cart.length === 0) {
+  if (!cart || cart.length === 0) {
     return <div className="cart-empty">Your cart is empty</div>;
   }
 
   return (
     <div className="cart-container">
-      <h1 className="cart-title">Your Shopping Cart</h1>
+
+      <h1 className="cart-title">Your Cart</h1>
 
       <div className="cart-items">
         {cart.map(item => (
           <div key={item.id} className="cart-item">
-            
-            <div className="item-product">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="item-image"
-              />
-              <h3 className="item-name">{item.title}</h3>
+
+       {/* image okke kodukune */}
+            <img
+              src={item.image}
+              alt={item.title}
+              className="cart-image"
+            />
+
+            {/* game information */}
+            <div className="cart-info">
+              <h3 className="cart-name">{item.title}</h3>
+              <p className="cart-price">₹{item.price}</p>
             </div>
 
-            <div className="item-price">
-              ₹{item.price}
+           {/* game inte quantity */}
+            <div className="cart-qty">
+              <button
+                className="qty-btn"
+                onClick={() => decreaseQuantity(item.id)}
+              >
+                -
+              </button>
+
+              <span className="qty-number">{item.quantity}</span>
+
+              <button
+                className="qty-btn"
+                onClick={() => increaseQuantity(item.id)}
+              >
+                +
+              </button>
             </div>
 
-           
-
-            <div className="item-total">
+         {/* games inte total */}
+            <div className="cart-total">
               ₹{item.price * item.quantity}
             </div>
 
+            {/* cart il nin remove akkan */}
             <button
-              className="remove-btn"
+              className="cart-remove"
               onClick={() => removeFromCart(item.id)}
             >
-              remove
+              Remove
             </button>
+
           </div>
         ))}
       </div>
 
+      {/* checkout cheyan ulla space */}
       <div className="cart-summary">
-        <h2>Total: ₹{getTotalPrice()}</h2>
+        <h2 className="summary-text">Total: ₹{getTotalPrice()}</h2>
 
-        <button className="clear-cart-btn" onClick={clearCart}>
-          Clear Cart
-        </button>
+        <div className="summary-buttons">
+          <button className="clear-btn" onClick={clearCart}>
+            Clear Cart
+          </button>
 
-        {/* ✅ CHECKOUT → PAYMENT */}
-        <button
-          className="checkout-btn"
-          onClick={() => navigate('/payment')}
-        >
-          Proceed to Checkout
-        </button>
+          <button
+            className="checkout-btn"
+            onClick={() => navigate('/payment')}
+          >
+            Checkout
+          </button>
+        </div>
       </div>
+
     </div>
   );
 };

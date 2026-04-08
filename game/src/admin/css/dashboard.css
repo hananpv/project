@@ -1,0 +1,62 @@
+/* Dashboard Container */
+.dashboard {
+  padding: 10px;
+}
+
+/* Title */
+.dashboard h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Cards Grid */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Card Design */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Title */
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #374151;
+}
+
+/* Card Value */
+.card p {
+  font-size: 22px;
+  font-weight: bold;
+  color: #111827;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+}

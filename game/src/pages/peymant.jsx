@@ -1,102 +1,120 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { api } from '../api/Axios';
 import '../css/payment.css';
+import { toast } from 'react-toastify';
+
+
+
 
 function Payment() {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
+  const { cart, clearCart } = useCart();
 
-  if (!user || user.cart.length === 0) {
-    return <div className="payment-empty">No items to pay</div>;
-  }
+  const [method, setMethod] = useState("card");
+  const [address, setAddress] = useState({ name: "", phone: "", address: "" });
 
-  const totalAmount = user.cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  if (!cart?.length) return <div className="payment-empty">No items to pay</div>;
+
+  const totalAmount = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
   const handlePayment = async () => {
-    const paymentData = {
-      orderId: `ORD-${Date.now()}`,
-      date: new Date().toISOString(),
-      items: user.cart,
+    if (!address.name || address.phone.length !== 10 || !address.address)
+      return toast.error("Fill all details");
+
+    const payment = {
+      id: Date.now(),
+      items: cart.map(({ id, title, price, quantity }) => ({ id, title, price, quantity })),
       totalAmount,
-      paymentMethod: 'Card',
-      status: 'Paid'
+      paymentMethod: method,
+      address,
+      status: method === "cod" ? "Pending" : "Paid"
     };
 
-    const updatedUser = {
-      ...user,
-      cart: [],
-      payments: [...user.payments, paymentData]
-    };
+    try {
+      const res = await api.patch(`/users/${user.id}`, {
+        ...user,
+        cart: [],
+        payments: [...(user.payments || []), payment]
+      });
 
-    const res = await api.patch(`/users/${user.id}`, updatedUser);
-    updateUser(res.data);
-
-    alert('Payment successful!');
-    navigate('/orders');
+      updateUser(res.data);
+      clearCart();
+      toast.success("Order placed!");
+      navigate("/orders");
+    } catch {
+      toast.error("Failed");
+    }
   };
 
   return (
     <div className="payment-container">
-      <h1 className="payment-title">Payment</h1>
 
+      <h1 className="payment-title">Checkout</h1>
+
+      {/* Items */}
       <div className="payment-items">
-        {user.cart.map(item => (
-          <div key={item.id} className="payment-item">
-
-            <img
-              src={item.image}
-              alt={item.title}
-              className="payment-item-image"
-            />
-
-            <div className="payment-item-info">
-              <span className="payment-item-title">
-                {item.title} × {item.quantity}
-              </span>
-              <span className="payment-item-price">
-                ₹{item.price * item.quantity}
-              </span>
+        {cart.map(i => (
+          <div key={i.id} className="payment-item">
+            <img src={i.image} alt={i.title} />
+            <div className="payment-left">
+              <p>{i.title}</p>
+              <p>₹{i.price} × {i.quantity}</p>
             </div>
-
+            <div className="payment-right">₹{i.price * i.quantity}</div>
           </div>
         ))}
       </div>
 
-      <div className="payment-details">
-        <h3>Payment Details</h3>
+      {/* Address */}
+      <div className="payment-section">
+        <h3>Delivery Address</h3>
 
-        <div className="detail-row">
-          <span>Payment Method</span>
-          <span>Card</span>
-        </div>
+        <input placeholder="Name"
+          onChange={e => setAddress({ ...address, name: e.target.value })} />
 
-        <div className="detail-row">
-          <span>Card</span>
-          <span>**** **** **** 1234</span>
-        </div>
+        <input placeholder="Phone" maxLength={10}
+          onChange={e => setAddress({ ...address, phone: e.target.value.replace(/\D/g, "") })} />
 
-        <div className="detail-row">
-          <span>Status</span>
-          <span className="paid-status">Ready to Pay</span>
-        </div>
+        <textarea placeholder="Address"
+          onChange={e => setAddress({ ...address, address: e.target.value })} />
       </div>
 
+      {/* Payment */}
+      <div className="payment-section">
+        <h3>Payment</h3>
+
+        {["card", "upi", "cod"].map(m => (
+          <label key={m}>
+            <input type="radio" name="p" value={m}
+              checked={method === m}
+              onChange={e => setMethod(e.target.value)} />
+            {m.toUpperCase()}
+          </label>
+        ))}
+
+        {method !== "cod" && (
+          <div className="payment-inputs">
+            <input placeholder={method === "upi" ? "UPI ID" : "Card Number"} />
+          </div>
+        )}
+      </div>
+
+      {/* Total */}
       <div className="payment-total">
         <span>Total</span>
         <span>₹{totalAmount}</span>
       </div>
 
       <button className="pay-btn" onClick={handlePayment}>
-        Pay Now
+        Place Order
       </button>
+
     </div>
   );
 }
 
 export default Payment;
- 
