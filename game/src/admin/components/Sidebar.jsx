@@ -1,18 +1,46 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "../css/sidebar.css";
-
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
 function Sidebar() {
-  return (
-    <div className="sidebar">
-      <h2>Admin</h2>
+  const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
 
+  const menu = [
+    { name: "Dashboard", path: "/admin" },
+    { name: "Products", path: "/admin/products"},
+    { name: "Users", path: "/admin/users"  },
+    { name: "Orders", path: "/admin/orderss" },
+  ];
+
+  return (
+    <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+      
+      {/* Header */}
+      <div className="sidebar-header">
+        <h2>{collapsed ? "A" : "Admin"}</h2>
+        <button onClick={() => setCollapsed(!collapsed)}>
+{collapsed ? (
+  <img src="/forward-square-svgrepo-com.svg" width="20" />
+
+) : (
+  <img src="/back-square-svgrepo-com.svg" width="20" />)}      </button>
+      </div>
+
+      {/* Menu */}
       <ul>
-        <li><Link to="/admin">Dashboard</Link></li>
-        <li><Link to="/admin/products">Products</Link></li>
-        <li><Link to="/admin/users">Users</Link></li>
-        <li><Link to="/admin/orderss">Orders</Link></li>
+        {menu.map((item, index) => (
+          <li
+            key={index}
+            className={location.pathname === item.path ? "active" : ""}
+          >
+            <Link to={item.path}>
+              <span className="icon">{item.icon}</span>
+              {!collapsed && <span>{item.name}</span>}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

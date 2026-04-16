@@ -1,6 +1,11 @@
 // src/App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
@@ -21,17 +26,20 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Profile from "./pages/Profile";
 
-// 🔥 Admin imports
+//  Admin imports
 import AdminLayout from "./admin/AdminLayout";
 import Dashboard from "./admin/pages/Dashboard.jsx ";
 import Products from "./admin/pages/Products";
 import Orderss from "./admin/pages/Orderss";
 import Users from "./admin/pages/Users";
 
+//  Protected Routes
+import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-
 
 function AppLayout() {
   const location = useLocation();
@@ -39,7 +47,7 @@ function AppLayout() {
   const hideNavbar =
     location.pathname === "/login" ||
     location.pathname === "/register" ||
-    location.pathname.startsWith("/admin"); // 🔥 hide navbar for admin
+    location.pathname.startsWith("/admin");
 
   return (
     <div className="app">
@@ -48,29 +56,84 @@ function AppLayout() {
       <main className="main-content">
         <Routes>
 
-          {/* USER ROUTES */}
+          {/* PUBLIC */}
           <Route path="/" element={<Home />} />
           <Route path="/games" element={<Game />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/library" element={<Library />} />
           <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile />} />
+
+          {/*  USER PROTECTED */}
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <Cart />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/wishlist"
+            element={
+              <ProtectedRoute>
+                <Wishlist />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/payment"
+            element={
+              <ProtectedRoute>
+                <Payment />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/library"
+            element={
+              <ProtectedRoute>
+                <Library />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
           {/* AUTH */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* 🔥 ADMIN ROUTES */}
-        <Route path="/admin" element={<AdminLayout />}>
-  <Route index element={<Dashboard />} />
-  <Route path="products" element={<Products />} />
-  <Route path="users" element={<Users />} />
-  <Route path="orderss" element={<Orderss />} />
-</Route>
-
+          {/*  ADMIN PROTECTED */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="products" element={<Products />} />
+            <Route path="users" element={<Users />} />
+            <Route path="orderss" element={<Orderss />} />
+          </Route>
 
         </Routes>
       </main>

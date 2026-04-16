@@ -1,6 +1,6 @@
 .sidebar {
   width: 220px;
-  background: #111827;
+  background: #707070;
   color: #fff;
   padding: 20px;
 }
@@ -26,4 +26,99 @@
 
 .sidebar a:hover {
   color: #fff;
+}/* Sidebar Base */
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  background: linear-gradient(180deg, #6f6f6f, #ffffff);
+  color: #fff;
+  padding: 20px 10px;
+  transition: 0.3s ease;
+  position: fixed;
+}
+
+/* Collapsed */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* Header */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+}
+
+.sidebar-header button {
+  background: #797979;
+  border: none;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Menu */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+/* Links */
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  color: #cbd5f5;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+/* Hover */
+.sidebar a:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+/* Active */
+.sidebar li.active a {
+  background: linear-gradient(135deg, #3f3f3f, #7b7b7b);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(90, 91, 94, 0.4);
+}
+
+/* Icon */
+.icon {
+  font-size: 18px;
+}
+
+/* Tooltip when collapsed */
+.sidebar.collapsed a span:last-child {
+  display: none;
+}
+
+/* Smooth */
+.sidebar a,
+.sidebar-header button {
+  transition: all 0.3s ease;
+}
+/* When sidebar collapsed */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed + .admin-main {
+  margin-left: 70px;
+  width: calc(100% - 70px);
 }

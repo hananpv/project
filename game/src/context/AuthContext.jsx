@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       ...userData,
       id: Date.now().toString(),
       role: 'user',
+      isBlocked: false, 
       cart: [],
       wishlist: [],
       payments: [],

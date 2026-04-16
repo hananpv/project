@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import '../css/orders.css';
@@ -6,7 +5,6 @@ import '../css/orders.css';
 function Orders() {
   const { user } = useAuth();
 
- 
   if (!user || !user.payments || user.payments.length === 0) {
     return <div className="orders-empty">No orders yet</div>;
   }
@@ -15,35 +13,50 @@ function Orders() {
     <div className="orders-container">
       <h1 className="orders-title">Your Orders</h1>
 
-      {user.payments.map((order) => (
-        <div key={order.orderId} className="order-card">
+      {user.payments.map((order, orderIndex) => (
+        <div key={order.orderId || orderIndex} className="order-card">
 
           <div className="order-header">
             <h3 className="order-id">Order ID: {order.orderId}</h3>
-            <span className="order-status">{order.status}</span>
+            <span className={`order-status ${order.status?.toLowerCase()}`}>
+              {order.status}
+            </span>
           </div>
 
           <p className="order-date">
-            {new Date(order.date).toLocaleString()}
+            {order.date
+              ? new Date(order.date).toLocaleString()
+              : "No date"}
           </p>
 
           <div className="order-items">
-            {order.items.map((item) => (
-              <div key={item.id} className="order-item">
+            {order.items.map((item, index) => (
+              <div
+                key={`${order.orderId}-${item.id || index}`}
+                className="order-item"
+              >
 
-                <img
-                  src={item.image || '/placeholder.png'}
+                {/* ✅ FIXED IMAGE */}
+                {/* <img
+                  src={
+                    item.image?.startsWith("data:image")
+                      ? item.image
+                      : item.image?.startsWith("/products")
+                      ? `http://localhost:5000${item.image}`
+                      : item.image?.startsWith("http")
+                      ? item.image   // ✅ real direct URL
+                      : "/placeholder.png"
+                  }
+                  onError={(e) => (e.target.src = "/placeholder.png")}
                   alt={item.title}
                   className="order-item-image"
-                />
+                /> */}
 
                 <div className="order-item-info">
-                
                   <span className="order-item-title">
-                    {item.title} × 1
+                    {item.title} × {item.quantity || 1}
                   </span>
 
-                 
                   <span className="order-item-price">
                     ₹{item.price}
                   </span>
@@ -64,4 +77,6 @@ function Orders() {
   );
 }
 
-export default Orders;
+export default Orders; 
+
+

@@ -25,14 +25,23 @@ function Payment() {
     if (!address.name || address.phone.length !== 10 || !address.address)
       return toast.error("Fill all details");
 
-    const payment = {
-      id: Date.now(),
-      items: cart.map(({ id, title, price, quantity }) => ({ id, title, price, quantity })),
-      totalAmount,
-      paymentMethod: method,
-      address,
-      status: method === "cod" ? "Pending" : "Paid"
-    };
+   const payment = {
+  id: Date.now(),
+
+  date: new Date().toISOString(), //  ADD THIS
+
+  items: cart.map(({ id, title, price, quantity }) => ({
+    id,
+    title,
+    price,
+    quantity
+  })),
+
+  totalAmount,
+  paymentMethod: method,
+  address,
+  status: method === "cod" ? "Pending" : "Paid"
+};
 
     try {
       const res = await api.patch(`/users/${user.id}`, {

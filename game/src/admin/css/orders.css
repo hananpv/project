@@ -1,66 +1,190 @@
-/* Container */
+/* ================= CONTAINER ================= */
 .orders {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  color: #444;
 }
 
 /* Title */
 .orders h2 {
-  color: #9333ea;
+  color: #000000;
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: 600;
 }
 
-/* Table */
+/* ================= TABLE ================= */
 .orders table {
   width: 100%;
   border-collapse: collapse;
 }
 
-/* Header */
 .orders th {
-  background: #faf5ff;
+  background: #f3f4f6;
+  color: #666;
   padding: 12px;
   text-align: left;
-  font-weight: 600;
-  color: #4c1d95;
 }
 
-/* Rows */
 .orders td {
   padding: 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
+  border-bottom: 1px solid #eee;
 }
 
-/* Hover effect */
+.orders tr:nth-child(even) {
+  background: #fafafa;
+}
+
 .orders tr:hover {
-  background: #f9fafb;
+  background: #f5f7fa;
 }
 
-/* Status Styling */
-.orders td:last-child {
-  font-weight: bold;
-  color: green;
+/* Button */
+.orders button {
+  background: #888;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-/* Empty message */
-.orders td[colspan] {
-  text-align: center;
+.orders button:hover {
+  background: #555;
+}
+
+/* ================= MODAL ================= */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🔥 BIG WIDTH FIX */
+.modal-box {
+  background: #fff;
+
+  width: 85vw;           /* ✅ use viewport width */
+  max-width: 1000px;      /* ✅ limit max */
+  min-width: 600px;      /* ✅ ensure expansion */
+
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Title */
+.modal-box h3 {
+  font-size: 22px;
+  margin-bottom: 14px;
+  color: #333;
+}
+
+/* Section */
+.modal-box h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
   color: #666;
-  padding: 20px;
 }
 
-/* Responsive */
+/* Text */
+.modal-box p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* ================= ORDER ITEM ================= */
+
+/* 🔥 BIG CARD + GRID */
+.order-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* more space for text */
+  gap: 20px;
+
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #ffffff;
+  margin-bottom: 16px;
+}
+
+/* 🔥 TEXT GRID (FIX ALIGNMENT) */
+.order-item-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Label styling */
+.order-item-info strong {
+  color: #333;
+}
+
+/* Description full width */
+.order-item-info p:last-child {
+  grid-column: span 2;
+}
+
+/* 🔥 IMAGE BIGGER */
+.order-img-box {
+  width: 100%;
+  height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.order-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================= BUTTON ================= */
+.modal-actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  background: #888;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-actions button:hover {
+  background: #555;
+}
+
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
-  .orders table {
-    font-size: 14px;
+  .modal-box {
+    width: 95%;
+    padding: 18px;
   }
 
-  .orders th,
-  .orders td {
-    padding: 8px;
+  .order-item {
+    grid-template-columns: 1fr;
+  }
+
+  .order-img-box {
+    height: 200px;
   }
 }
