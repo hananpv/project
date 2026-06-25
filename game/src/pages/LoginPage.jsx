@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { api } from "../api/Axios";
 import { useAuth } from "../context/AuthContext";
 import "../css/LoginPage.css";
 import Snowfall from "react-snowfall";
@@ -28,47 +27,24 @@ const LoginPage = () => {
     try {
       setLoading(true);
 
-      const { data } = await api.get("/users");
-
-      const user = data.find(
-        (u) =>
-          (u.email === emailOrUsername.trim() ||
-            u.username === emailOrUsername.trim()) &&
-          u.password === password
-      );
-
-      //  Invalid user
-      if (!user) {
-        setError("Invalid email/username or password");
-        toast.error("Login failed");
-        return;
-      }
-
-      //  Blocked user
-      if (user.isBlocked) {
-        setError("Your account is blocked by admin");
-        toast.error("Account blocked");
-        return;
-      }
-
-      //  Save user (persistent login)
-      localStorage.setItem("user", JSON.stringify(user));
-
-      //  Context login
-      login(user);
+      const user = await login({
+        email: emailOrUsername.trim(),
+        password,
+      });
 
       toast.success("Login successful");
 
-      //  Role-based redirect
       if (user.role === "admin") {
-        navigate("/admin"); // admin dashboard
+        navigate("/admin");
       } else {
-        navigate("/"); // user home
+        navigate("/");
       }
 
     } catch (err) {
       console.error(err);
-      setError("Login failed. Try again.");
+      const message = err.response?.data?.message || "Login failed. Try again.";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

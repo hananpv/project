@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth } from './AuthContext';
-import { api } from '../api/Axios';
 import { toast } from 'react-toastify';
+import { api, normalizeGame } from '../api/Axios';
+import { useAuth } from './AuthContext';
 
 const WishlistContext = createContext(null);
 export const useWishlist = () => useContext(WishlistContext);
@@ -10,40 +10,58 @@ export const WishlistProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const [wishlist, setWishlist] = useState([]);
 
+  const normalizeWishlistItem = (item) => normalizeGame(item.gameId || item);
+
+  const refreshWishlist = async () => {
+    const { data } = await api.get('/wishlist');
+    setWishlist(data.map(normalizeWishlistItem));
+  };
 
   useEffect(() => {
-    if (user?.wishlist) {
-      setWishlist(user.wishlist);
-    } else {
-      setWishlist([]);
-    }
-  }, [user]);
+    const loadWishlist = async () => {
+      if (!isAuthenticated) {
+        setWishlist([]);
+        return;
+      }
 
- 
+      try {
+        await refreshWishlist();
+      } catch (error) {
+        console.error('Failed to load wishlist:', error);
+        setWishlist([]);
+      }
+    };
+
+    loadWishlist();
+  }, [isAuthenticated, user?.id]);
+
   const addToWishlist = async (product) => {
     if (!isAuthenticated) {
       toast('Please login to add to wishlist');
       return;
     }
 
-    if (wishlist.some(item => item.id === product.id)) return;
+    const gameId = product.id || product._id;
+    if (wishlist.some(item => item.id === gameId)) return;
 
-    const updatedWishlist = [...wishlist, product];
-    setWishlist(updatedWishlist);
-
-    await api.patch(`/users/${user.id}`, {
-      wishlist: updatedWishlist
-    });
+    try {
+      const { data } = await api.post('/wishlist', { gameId });
+      setWishlist(prev => [...prev, normalizeWishlistItem(data)]);
+    } catch (error) {
+      console.error('Failed to add to wishlist:', error);
+      toast.error(error.response?.data?.message || 'Failed to add to wishlist');
+    }
   };
 
-
   const removeFromWishlist = async (id) => {
-    const updatedWishlist = wishlist.filter(item => item.id !== id);
-    setWishlist(updatedWishlist);
+    setWishlist(prev => prev.filter(item => item.id !== id));
 
-    await api.patch(`/users/${user.id}`, {
-      wishlist: updatedWishlist
-    });
+    try {
+      await api.delete(`/wishlist/${id}`);
+    } catch (error) {
+      console.error('Failed to remove from wishlist:', error);
+      await refreshWishlist();
+    }
   };
 
   const isInWishlist = (id) =>
@@ -54,7 +72,7 @@ export const WishlistProvider = ({ children }) => {
       wishlist,
       addToWishlist,
       removeFromWishlist,
-      isInWishlist
+      isInWishlist,
     }}>
       {children}
     </WishlistContext.Provider>

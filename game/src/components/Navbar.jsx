@@ -5,7 +5,7 @@ import '../css/Navbar.css';
 
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { useWishlist } from '../context/WishlistContext';
+import { useWishlist } from '../context/wishListContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ const Navbar = () => {
               <div className="user-dropdown">
                 <button className="user-menu">
                   <span className="user-avatar">👤</span>
-                  <span className="user-name">{user.username}</span>
+                  <span className="user-name">{user.username || user.name}</span>
                   <span className="dropdown-arrow">▼</span>
                 </button>
 

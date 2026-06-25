@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { api } from '../api/Axios';
+import { api, getImageUrl } from '../api/Axios';
 import '../css/payment.css';
 import { toast } from 'react-toastify';
 
@@ -11,7 +10,6 @@ import { toast } from 'react-toastify';
 
 function Payment() {
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
   const { cart, clearCart } = useCart();
 
   const [method, setMethod] = useState("card");
@@ -25,32 +23,11 @@ function Payment() {
     if (!address.name || address.phone.length !== 10 || !address.address)
       return toast.error("Fill all details");
 
-   const payment = {
-  id: Date.now(),
-
-  date: new Date().toISOString(), //  ADD THIS
-
-  items: cart.map(({ id, title, price, quantity }) => ({
-    id,
-    title,
-    price,
-    quantity
-  })),
-
-  totalAmount,
-  paymentMethod: method,
-  address,
-  status: method === "cod" ? "Pending" : "Paid"
-};
-
     try {
-      const res = await api.patch(`/users/${user.id}`, {
-        ...user,
-        cart: [],
-        payments: [...(user.payments || []), payment]
+      await api.post('/orders', {
+        paymentMethod: method,
+        address,
       });
-
-      updateUser(res.data);
       clearCart();
       toast.success("Order placed!");
       navigate("/orders");
@@ -68,7 +45,7 @@ function Payment() {
       <div className="payment-items">
         {cart.map(i => (
           <div key={i.id} className="payment-item">
-            <img src={i.image} alt={i.title} />
+            <img src={getImageUrl(i.image)} alt={i.title} />
             <div className="payment-left">
               <p>{i.title}</p>
               <p>₹{i.price} × {i.quantity}</p>

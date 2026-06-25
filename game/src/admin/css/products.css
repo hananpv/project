@@ -304,4 +304,15 @@ button:hover {
 label {
   font-size: 14px;
   color: #555;
+}/* Put both checkboxes in one row */
+.modal-box label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 20px;
+}
+
+/* Optional: spacing from inputs above */
+.modal-box label:first-of-type {
+  margin-top: 8px;
 }

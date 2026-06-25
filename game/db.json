@@ -374,6 +374,90 @@
         }
       ],
       "createdAt": "2026-04-16T05:18:50.819Z"
+    },
+    {
+      "username": "Fasil",
+      "email": "fasil12@gmail.com",
+      "password": "Fasil@12",
+      "id": "yCPd-GCgg7I",
+      "role": "user",
+      "isBlocked": false,
+      "cart": [],
+      "wishlist": [],
+      "payments": [
+        {
+          "id": 1776764853831,
+          "date": "2026-04-21T09:47:33.831Z",
+          "items": [
+            {
+              "id": "2",
+              "title": "Red Dead Redemption II",
+              "price": 3999,
+              "quantity": 1
+            },
+            {
+              "id": "23",
+              "title": "Call of Duty Warzone",
+              "price": 1899,
+              "quantity": 2
+            },
+            {
+              "id": "25",
+              "title": "Battlefield Bad Company 2",
+              "price": 999,
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 8796,
+          "paymentMethod": "cod",
+          "address": {
+            "name": "Fail",
+            "phone": "9876543210",
+            "address": "kakenjeri"
+          },
+          "status": "Pending"
+        }
+      ],
+      "createdAt": "2026-04-21T09:45:04.907Z"
+    },
+    {
+      "username": "Shamil",
+      "email": "shamil@gmail.com",
+      "password": "Shamil@12",
+      "id": "4c5UtZAbCMY",
+      "role": "user",
+      "isBlocked": false,
+      "cart": [],
+      "wishlist": [],
+      "payments": [
+        {
+          "id": 1776765129479,
+          "date": "2026-04-21T09:52:09.479Z",
+          "items": [
+            {
+              "id": "3",
+              "title": "The Witcher 3: Wild Hunt",
+              "price": 999,
+              "quantity": 1
+            },
+            {
+              "id": "22",
+              "title": "Gran Turismo 7",
+              "price": 4999,
+              "quantity": 3
+            }
+          ],
+          "totalAmount": 15996,
+          "paymentMethod": "cod",
+          "address": {
+            "name": "shamil",
+            "phone": "9876543210",
+            "address": "Kakenjeri"
+          },
+          "status": "Pending"
+        }
+      ],
+      "createdAt": "2026-04-21T09:50:27.748Z"
     }
   ],
   "games": [

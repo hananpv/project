@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { useWishlist } from '../context/WishlistContext';
+import { useWishlist } from '../context/wishListContext';
 import '../css/game.css';
-import { api } from "../api/Axios";
+import { api, getImageUrl, normalizeGame } from "../api/Axios";
 import { useLocation } from 'react-router-dom';
 
 function Game() {
@@ -27,7 +27,7 @@ function Game() {
     const fetchGames = async () => {
       try {
         const res = await api.get('/games');
-        setGames(Array.isArray(res.data) ? res.data : []); 
+        setGames(Array.isArray(res.data) ? res.data.map(normalizeGame) : []); 
       } catch (error) {
         console.error('Failed to load games:', error);
       } finally {
@@ -76,7 +76,7 @@ function Game() {
               <div className="game-card" key={index}>
                 <div className="game-image">
                   <img
-                    src={game.image || '/placeholder.png'}
+                    src={getImageUrl(game.image)}
                     alt={game.title}
                   />
  

@@ -1,6 +1,7 @@
 import React from 'react';
-import { useWishlist } from '../context/WishlistContext';
+import { useWishlist } from '../context/wishListContext';
 import { useCart } from '../context/CartContext';
+import { getImageUrl } from '../api/Axios';
 import '../css/Wishlist.css';
 
 const Wishlist = () => {
@@ -33,7 +34,7 @@ const Wishlist = () => {
           <div key={item.id} className="wishlist-item">
             
             <div className="wishlist-item-image">
-              <img src={item.image} alt={item.title} />
+              <img src={getImageUrl(item.image)} alt={item.title} />
             </div>
 
             <div className="wishlist-item-details">

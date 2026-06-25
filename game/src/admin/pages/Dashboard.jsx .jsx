@@ -25,29 +25,28 @@ function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const [usersRes, productsRes] = await Promise.all([
+      const [usersRes, productsRes, ordersRes] = await Promise.all([
         api.get("/users"),
         api.get("/games"),
+        api.get("/orders"),
       ]);
 
       const users = usersRes.data;
       const products = productsRes.data;
-
-      //  collect orders
-      const orders = users.flatMap(u => u.payments || []);
+      const orders = ordersRes.data;
 
       //  revenue
       const revenue = orders.reduce(
-        (sum, o) => sum + Number(o.totalAmount || 0),
+        (sum, o) => sum + Number(o.total || 0),
         0
       );
 
       //  revenue trend
       const revenueMap = {};
       orders.forEach(o => {
-        if (!o.   date) return;
-        const d = new Date(o.date).toLocaleDateString();
-        revenueMap[d] = (revenueMap[d] || 0) + Number(o.totalAmount || 0);
+        if (!o.createdAt) return;
+        const d = new Date(o.createdAt).toLocaleDateString();
+        revenueMap[d] = (revenueMap[d] || 0) + Number(o.total || 0);
       });
 
       const revenueData = Object.entries(revenueMap).map(([date, revenue]) => ({

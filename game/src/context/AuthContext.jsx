@@ -15,28 +15,20 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-//  Page refresh / reload aayalum
-//  User login maintain cheyyan 
-   useEffect(() => {
+  useEffect(() => {
     const loadUser = async () => {
       try {
-        const savedUser = localStorage.getItem('gameStoreUser');
-        if (!savedUser) return;
+        const token = localStorage.getItem('gameStoreToken');
+        if (!token) return;
 
-        const parsedUser = JSON.parse(savedUser);
-
-      
-
-        
-        const res = await api.get(`/users/${parsedUser.id}`);
+        const res = await api.get('/auth/me');
         setUser(res.data);
-
-      
-
         localStorage.setItem('gameStoreUser', JSON.stringify(res.data));
       } catch (error) {
         console.error('Auth load failed:', error);
+        localStorage.removeItem('gameStoreToken');
         localStorage.removeItem('gameStoreUser');
+        localStorage.removeItem('userId');
       } finally {
         setLoading(false);
       }
@@ -45,48 +37,39 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  //expects full user from backend
-  const login = async (userData) => {
-    // userData MUST include cart & wishlist
-    setUser(userData);
-    localStorage.setItem('gameStoreUser', JSON.stringify(userData));
-    localStorage.setItem('userId', userData.id);
+  const login = async ({ email, password }) => {
+    const { data } = await api.post('/auth/login', { email, password });
+
+    localStorage.setItem('gameStoreToken', data.token);
+    localStorage.setItem('gameStoreUser', JSON.stringify(data.user));
+    localStorage.setItem('userId', data.user.id);
+    setUser(data.user);
+
+    return data.user;
   };
 
-  //  REGISTER
   const register = async (userData) => {
-    const newUser = {
-      ...userData,
-      id: Date.now().toString(),
-      role: 'user',
-      isBlocked: false, 
-      cart: [],
-      wishlist: [],
-      payments: [],
-      createdAt: new Date().toISOString()
-    };
+    const { data } = await api.post('/auth/register', userData);
 
-    // SAVE USER TO DB
-    await api.post('/users', newUser);
+    localStorage.setItem('gameStoreToken', data.token);
+    localStorage.setItem('gameStoreUser', JSON.stringify(data.user));
+    localStorage.setItem('userId', data.user.id);
+    setUser(data.user);
 
-    setUser(newUser);
-    localStorage.setItem('gameStoreUser', JSON.stringify(newUser));
-    localStorage.setItem('userId', newUser.id);
-
-    return newUser;
+    return data.user;
   };
 
-  //  UPDATE USER (USED BY CART/WISHLIST)
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
     localStorage.setItem('gameStoreUser', JSON.stringify(updatedUser));
   };
 
-  //  LOGOUT
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('gameStoreToken');
     localStorage.removeItem('gameStoreUser');
     localStorage.removeItem('userId');
+    localStorage.removeItem('user');
   };
 
   const isAuthenticated = Boolean(user);

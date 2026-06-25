@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api } from "../api/Axios"; 
 import { useAuth } from "../context/AuthContext";
 import "../css/RegisterPage.css";
 import { toast } from "react-toastify";
@@ -36,34 +35,20 @@ const RegisterPage = () => {
     try {
       setLoading(true);
 
-      const res = await api.get("/users");
-
-      const emailExists = res.data.some(u => u.email === email);
-      if (emailExists) {
-        setError("Email already registered");
-        setLoading(false);
-        return;
-      }
-
-      const usernameExists = res.data.some(u => u.username === username);
-      if (usernameExists) {
-        setError("Username already taken");
-        setLoading(false);
-        return;
-      }
-
       await register({
-        username,
+        name: username,
         email,
         password
       });
 
-      toast("Registration successful! Please login.");
-      navigate("/login");
+      toast.success("Registration successful!");
+      navigate("/");
 
     } catch (err) {
       console.error(err);
-      setError("Registration failed. Try again.");
+      const message = err.response?.data?.message || "Registration failed. Try again.";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

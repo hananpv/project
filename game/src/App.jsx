@@ -9,7 +9,7 @@ import {
 
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
-import { WishlistProvider } from "./context/WishlistContext";
+import { WishlistProvider } from "./context/wishListContext";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";

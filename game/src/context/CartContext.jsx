@@ -1,118 +1,128 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { api, normalizeGame } from '../api/Axios';
 import { useAuth } from './AuthContext';
-import { api } from '../api/Axios';
-import { toast } from "react-toastify";
 
 const CartContext = createContext(null);
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const { user, isAuthenticated, updateUser } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    if (user?.cart) {
-      setCart(user.cart);
-    } else {
-      setCart([]);
-    }
-  }, [user]);
+  const normalizeCartItem = (item) => {
+    const game = normalizeGame(item.gameId || item);
 
-  
+    return {
+      ...game,
+      cartItemId: item._id || item.cartItemId,
+      quantity: item.quantity || 1,
+      price: Number(game.price || 0),
+    };
+  };
+
+  const refreshCart = async () => {
+    const { data } = await api.get('/cart');
+    setCart(data.map(normalizeCartItem));
+  };
+
+  useEffect(() => {
+    const loadCart = async () => {
+      if (!isAuthenticated) {
+        setCart([]);
+        return;
+      }
+
+      try {
+        await refreshCart();
+      } catch (error) {
+        console.error('Failed to load cart:', error);
+        setCart([]);
+      }
+    };
+
+    loadCart();
+  }, [isAuthenticated, user?.id]);
+
   const addToCart = async (product) => {
     if (!isAuthenticated) {
-      toast("Please login first!");
+      toast('Please login first!');
       return;
     }
 
-    const exists = cart.find(item => item.id === product.id);
-
-    if (exists) {
-      toast("Already in cart"); 
+    const gameId = product.id || product._id;
+    if (cart.some(item => item.id === gameId)) {
+      toast('Already in cart');
       return;
     }
 
-    const updatedCart = [
-      ...cart,
-      {
-        ...product,
-        price: Number(product.price),
-        quantity: 1
-      }
-    ];
-
-    setCart(updatedCart);
-
-    await api.patch(`/users/${user.id}`, {
-      cart: updatedCart
-    });
-
-    updateUser({ ...user, cart: updatedCart });
+    try {
+      const { data } = await api.post('/cart', { gameId, quantity: 1 });
+      setCart(prev => [...prev, normalizeCartItem(data)]);
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      toast.error(error.response?.data?.message || 'Failed to add to cart');
+    }
   };
 
-  // ✅ INCREASE (Cart Page)
   const increaseQuantity = async (id) => {
-    const updatedCart = cart.map(item =>
-      item.id === id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
 
-    setCart(updatedCart);
+    const quantity = item.quantity + 1;
+    setCart(prev => prev.map(i => i.id === id ? { ...i, quantity } : i));
 
-    await api.patch(`/users/${user.id}`, {
-      cart: updatedCart
-    });
-
-    updateUser({ ...user, cart: updatedCart });
+    try {
+      await api.put(`/cart/${item.cartItemId}`, { quantity });
+    } catch (error) {
+      console.error('Failed to increase quantity:', error);
+      await refreshCart();
+    }
   };
 
-  // ✅ DECREASE
   const decreaseQuantity = async (id) => {
     const item = cart.find(i => i.id === id);
     if (!item) return;
 
-    let updatedCart;
-
     if (item.quantity === 1) {
-      updatedCart = cart.filter(i => i.id !== id);
-    } else {
-      updatedCart = cart.map(i =>
-        i.id === id
-          ? { ...i, quantity: i.quantity - 1 }
-          : i
-      );
+      await removeFromCart(id);
+      return;
     }
 
-    setCart(updatedCart);
+    const quantity = item.quantity - 1;
+    setCart(prev => prev.map(i => i.id === id ? { ...i, quantity } : i));
 
-    await api.patch(`/users/${user.id}`, {
-      cart: updatedCart
-    });
-
-    updateUser({ ...user, cart: updatedCart });
+    try {
+      await api.put(`/cart/${item.cartItemId}`, { quantity });
+    } catch (error) {
+      console.error('Failed to decrease quantity:', error);
+      await refreshCart();
+    }
   };
 
-  // REMOVE
   const removeFromCart = async (id) => {
-    const updatedCart = cart.filter(item => item.id !== id);
-    setCart(updatedCart);
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
 
-    await api.patch(`/users/${user.id}`, {
-      cart: updatedCart
-    });
+    setCart(prev => prev.filter(i => i.id !== id));
 
-    updateUser({ ...user, cart: updatedCart });
+    try {
+      await api.delete(`/cart/${item.cartItemId}`);
+    } catch (error) {
+      console.error('Failed to remove cart item:', error);
+      await refreshCart();
+    }
   };
 
-  // CLEAR
   const clearCart = async () => {
-    setCart([]);
-    await api.patch(`/users/${user.id}`, { cart: [] });
-    updateUser({ ...user, cart: [] });
+    try {
+      await api.delete('/cart');
+      setCart([]);
+    } catch (error) {
+      console.error('Failed to clear cart:', error);
+    }
   };
 
-  // TOTAL
   const getTotalPrice = () =>
     cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -125,7 +135,7 @@ export const CartProvider = ({ children }) => {
         decreaseQuantity,
         removeFromCart,
         clearCart,
-        getTotalPrice
+        getTotalPrice,
       }}
     >
       {children}

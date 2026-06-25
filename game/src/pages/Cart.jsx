@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { getImageUrl } from '../api/Axios';
 import '../css/Cart.css';
 
 const Cart = () => {
@@ -31,7 +32,7 @@ const Cart = () => {
 
        {/* image okke kodukune */}
             <img
-              src={item.image}
+              src={getImageUrl(item.image)}
               alt={item.title}
               className="cart-image"
             />

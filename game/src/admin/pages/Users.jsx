@@ -156,7 +156,6 @@ function Users() {
             <p><strong>ID:</strong> {viewUser.id}</p>
             <p><strong>Username:</strong> {viewUser.username}</p>
             <p><strong>Email:</strong> {viewUser.email}</p>
-            <p><strong>Password:</strong> {viewUser.password}</p>
             <p><strong>Tier:</strong> {viewUser.tier || "Bronze"}</p>
          
             <div className="modal-actions">
