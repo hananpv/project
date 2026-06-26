@@ -38,7 +38,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       name: displayName,
-      username: username || displayName,
+      username: (username || displayName).trim().toLowerCase(),
       email: email.toLowerCase(),
       password: hashedPassword,
     });
@@ -60,12 +60,17 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const loginIdentifier = email.trim().toLowerCase();
+    const user = await User.findOne({
+      $or: [
+        { email: loginIdentifier },
+        { username: loginIdentifier }
+      ]
+    });
 
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
-    }
-
+    }a
     if (user.isBlocked) {
       return res.status(403).json({ message: "Your account is blocked by admin" });
     }

@@ -150,7 +150,7 @@ function Products() {
 
       {data.image && (
         <img
-          src={data.image}
+          src={getImageUrl(data.image)}
           alt="preview"
           style={{
             width: "100px",

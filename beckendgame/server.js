@@ -3,7 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
-
+const path = require("path");
 dotenv.config();
 connectDB();
 
@@ -11,7 +11,10 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+app.use(
+  "/products",
+  express.static(path.join(__dirname, "../game/public/products"))
+);
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/games", require("./routes/gameRoutes"));
 app.use("/api/cart", require("./routes/cartRoutes"));

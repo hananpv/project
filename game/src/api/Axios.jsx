@@ -23,7 +23,16 @@ export const normalizeGame = (game = {}) => ({
 export const getImageUrl = (image) => {
   if (!image) return '/placeholder.png';
   if (image.startsWith('http') || image.startsWith('data:image')) return image;
-  if (image.startsWith('/')) return `${api.defaults.baseURL.replace(/\/api$/, '')}${image}`;
-  return image;
+  
+  let normalized = image;
+  if (image.includes('products/')) {
+    const parts = image.split('products/');
+    normalized = '/products/' + parts[parts.length - 1];
+  }
+  
+  if (normalized.startsWith('/')) {
+    return `${api.defaults.baseURL.replace(/\/api$/, '')}${normalized}`;
+  }
+  return normalized;
 };
 

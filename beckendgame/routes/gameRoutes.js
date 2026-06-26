@@ -20,5 +20,5 @@ router.post("/", authMiddleware, addGame);
 router.put("/:id", authMiddleware, updateGame);
 
 router.delete("/:id", authMiddleware, deleteGame);
-
+ 
 module.exports = router;
