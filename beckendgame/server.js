@@ -8,7 +8,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
+console.log("RUNNING BACKEND:", __dirname);
 app.use(cors());
 app.use(express.json());
 app.use(

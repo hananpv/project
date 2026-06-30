@@ -122,6 +122,64 @@
   color: #111827;
 }
 
+/* ===== Order Info Sections ===== */
+.order-info-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.order-info-box h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+
+.order-info-box p {
+  font-size: 13px;
+  color: #4b5563;
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.order-info-box p strong {
+  color: #1f2937;
+}
+
+.payment-status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.payment-status-badge.paid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.payment-status-badge.pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.payment-status-badge.failed {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 /* ===== Total Section ===== */
 .order-total {
   margin-top: 20px;
@@ -153,6 +211,7 @@
   .order-item {
     flex-direction: column;
     text-align: center;
+    gap: 10px;
   }
 
   .order-item-info {
@@ -163,6 +222,11 @@
   .order-item-image {
     width: 100%;
     height: auto;
+  }
+
+  .order-info-sections {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .order-total {

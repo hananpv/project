@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+console.log("NEW ORDER MODEL LOADED");
 const orderSchema = new mongoose.Schema(
   {
     userId: {
@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     items: [
       {
         gameId: {
@@ -15,27 +16,81 @@ const orderSchema = new mongoose.Schema(
           required: true,
         },
         title: String,
-        price: Number,
         image: String,
+        price: Number,
         quantity: {
           type: Number,
           default: 1,
-          min: 1,
         },
       },
     ],
+
     total: {
       type: Number,
       required: true,
-      min: 0,
     },
-    status: {
+
+    address: {
+      name: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: String,
+        required: true,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: String,
+        required: true,
+      },
+      zipCode: {
+        type: String,
+        required: true,
+      },
+    },
+
+    paymentMethod: {
       type: String,
-      enum: ["pending", "paid", "cancelled"],
+      enum: ["card", "upi", "cod"],
+      required: true,
+    },
+
+    paymentDetails: {
+      cardNumber: String,
+      cardHolderName: String,
+      cardExpiry: String,
+      upiId: String,
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed"],
       default: "pending",
     },
+
+    orderStatus: {
+      type: String,
+      enum: [
+        "Placed",
+        "Processing",
+        "Shipped",
+        "Delivered",
+        "Cancelled",
+      ],
+      default: "Placed",
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 module.exports = mongoose.model("Order", orderSchema);
