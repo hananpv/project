@@ -30,20 +30,20 @@ const Cart = () => {
         {cart.map(item => (
           <div key={item.id} className="cart-item">
 
-       {/* image okke kodukune */}
+     
             <img
               src={getImageUrl(item.image)}
               alt={item.title}
               className="cart-image"
             />
 
-            {/* game information */}
+         
             <div className="cart-info">
               <h3 className="cart-name">{item.title}</h3>
               <p className="cart-price">₹{item.price}</p>
             </div>
 
-           {/* game inte quantity */}
+          
             <div className="cart-qty">
               <button
                 className="qty-btn"
@@ -62,12 +62,12 @@ const Cart = () => {
               </button>
             </div>
 
-         {/* games inte total */}
+       
             <div className="cart-total">
               ₹{item.price * item.quantity}
             </div>
 
-            {/* cart il nin remove akkan */}
+           
             <button
               className="cart-remove"
               onClick={() => removeFromCart(item.id)}
@@ -79,7 +79,7 @@ const Cart = () => {
         ))}
       </div>
 
-      {/* checkout cheyan ulla space */}
+   
       <div className="cart-summary">
         <h2 className="summary-text">Total: ₹{getTotalPrice()}</h2>
 

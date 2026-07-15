@@ -17,48 +17,19 @@
   letter-spacing: 0.5px;
 }
 
-/* Add Product Section */
-.add-product {
-  display: flex;
-  gap: 12px;
+.add-main-btn {
   margin-bottom: 20px;
-}
-
-/* Inputs */
-.add-product input {
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  outline: none;
-  background: #fafafa;
-  color: #333;
-  transition: all 0.3s ease;
-}
-
-.add-product input::placeholder {
-  color: #888;
-}
-
-.add-product input:focus {
-  border-color: #2563eb;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-/* Add Button */
-.add-product button {
-  padding: 12px 20px;
+  padding: 10px 18px;
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s ease;
   font-weight: 500;
+  transition: 0.3s ease;
 }
 
-.add-product button:hover {
+.add-main-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
 }
@@ -100,16 +71,17 @@
   transition: 0.2s;
 }
 
-/* Delete Button */
+/* Action Buttons */
 .products button {
   padding: 6px 14px;
-  background: #888; /* your requested color */
+  background: #888; 
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: 0.3s ease;
   font-size: 13px;
+  margin-right: 6px;
 }
 
 .products button:hover {
@@ -117,202 +89,102 @@
   transform: scale(1.05);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .add-product {
-    flex-direction: column;
-  }
+/* MODAL (Popups) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .products table {
-    font-size: 13px;
-  }
-
-  .products {
-    padding: 16px;
-  }
-}/* Container */
-.products {
+.modal-box {
   background: #fff;
   padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-}
-
-/* Title */
-.products h2 {
-  color: #000000;
-  margin-bottom: 20px;
-}
-
-/* Add Section */
-.add-product {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.add-product input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fafafa;
-}
-
-.add-product input::placeholder {
-  color: #888;
-}
-
-.add-product button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  background: #f3f4f6;
-  padding: 12px;
-  color: #555;
-}
-
-td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-tr:hover {
-  background: #f9fafb;
-}
-
-/* Buttons */
-button {
-  background: #888;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-right: 6px;
-}
-
-button:hover {
-  background: #555;
-}
-
-.edit-btn {
-  background: #2563eb;
-}
-
-.edit-btn:hover {
-  background: #1d4ed8;
-}
-
-/* MODAL */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  background: #fff;
-  padding: 20px;
   border-radius: 12px;
-  width: 300px;
-}
-
-.modal-box input {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
-}.add-main-btn {
-  margin-bottom: 15px;
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Modal */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 320px;
-}
-
-.modal-box.large {
-  width: 400px;
+  width: 400px; /* Made it wider for the form */
+  max-width: 90%;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-box h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .modal-box input,
-.modal-box textarea {
+.modal-box textarea,
+.modal-box select {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
+  background: #fafafa;
+  font-family: inherit;
+}
+
+.modal-box input:focus,
+.modal-box textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+  background: #fff;
 }
 
 .modal-box textarea {
-  resize: none;
-  height: 80px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.modal-box label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 20px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.modal-box label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
 }
 
 .modal-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-label {
-  font-size: 14px;
-  color: #555;
-}/* Put both checkboxes in one row */
-.modal-box label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-right: 20px;
+.modal-actions button {
+  padding: 10px 20px;
+  margin: 0;
 }
 
-/* Optional: spacing from inputs above */
-.modal-box label:first-of-type {
-  margin-top: 8px;
+.modal-actions button:first-child {
+  background: #2563eb;
+}
+
+.modal-actions button:first-child:hover {
+  background: #1d4ed8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .products table {
+    font-size: 13px;
+  }
+  .products {
+    padding: 16px;
+  }
 }

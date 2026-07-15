@@ -1,5 +1,6 @@
 const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
+const isAdmin = require("../middleware/isAdminMiddleware");
 const {
   getProfile,
   updateProfile,
@@ -11,14 +12,16 @@ const {
 
 const router = express.Router();
 
-router.use(authMiddleware);
+// User profile routes (any authenticated user)
+router.get("/profile", authMiddleware, getProfile);
+router.put("/profile", authMiddleware, updateProfile);
 
-router.get("/profile", getProfile);
-router.put("/profile", updateProfile);
-router.get("/", getUsers);
-router.get("/:id", getUser);
-router.patch("/:id", updateUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
+// Admin-only user management routes
+router.get("/", authMiddleware, isAdmin, getUsers);
+router.get("/:id", authMiddleware, isAdmin, getUser);
+router.patch("/:id", authMiddleware, isAdmin, updateUser);
+router.put("/:id", authMiddleware, isAdmin, updateUser);
+router.delete("/:id", authMiddleware, isAdmin, deleteUser);
 
 module.exports = router;
+

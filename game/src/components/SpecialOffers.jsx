@@ -15,7 +15,7 @@ const SpecialOffers = () => {
             <span className="offer-tag">UP TO 70% OFF</span>
             <h3>Summer Sale Extravaganza</h3>
             <p>Don't miss out on our biggest sale of the year!</p>
-            <button className="shop-now-btn">up to start next day</button>
+            <button className="shop-now-btn">Shop Now</button>
           </div>
           <div className="offer-space"></div>
         </div>
@@ -24,7 +24,7 @@ const SpecialOffers = () => {
             <span className="offer-tag">NEW RELEASE</span>
             <h3>Pre-order Now Available</h3>
             <p>Get exclusive bonuses with early pre-orders</p>
-            <button className="shop-now-btn">not available</button>
+            <button className="shop-now-btn">Pre-order</button>
           </div>
           <div className="offer-space"></div>
         </div>

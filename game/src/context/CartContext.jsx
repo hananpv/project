@@ -44,26 +44,27 @@ export const CartProvider = ({ children }) => {
     loadCart();
   }, [isAuthenticated, user?.id]);
 
-  const addToCart = async (product) => {
-    if (!isAuthenticated) {
-      toast('Please login first!');
-      return;
-    }
+const addToCart = async (product) => {
+  if (!isAuthenticated) {
+    toast.error("Please login first!");
+    return;
+  }
 
-    const gameId = product.id || product._id;
-    if (cart.some(item => item.id === gameId)) {
-      toast('Already in cart');
-      return;
-    }
+  const gameId = product.id || product._id;
 
-    try {
-      const { data } = await api.post('/cart', { gameId, quantity: 1 });
-      setCart(prev => [...prev, normalizeCartItem(data)]);
-    } catch (error) {
-      console.error('Failed to add to cart:', error);
-      toast.error(error.response?.data?.message || 'Failed to add to cart');
-    }
-  };
+  try {
+    const { data } = await api.post("/cart", {
+      gameId,
+      quantity: 1,
+    });
+
+    setCart((prev) => [...prev, normalizeCartItem(data)]);
+    toast.success("Added to cart");
+  } catch (error) {
+    console.error("Failed to add to cart:", error);
+    toast.error(error.response?.data?.message || "Failed to add to cart");
+  }
+};
 
   const increaseQuantity = async (id) => {
     const item = cart.find(i => i.id === id);

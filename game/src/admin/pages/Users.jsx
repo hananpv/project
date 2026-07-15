@@ -7,161 +7,83 @@ function Users() {
   const [viewUser, setViewUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // GET USERS
+  // GET users from admin route
   const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get("/users");
-      setUsers(res.data);
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Failed to load users");
-    } finally {
-      setLoading(false);
-    }
+    try { setLoading(true); const res = await api.get("/admin/users"); setUsers(res.data); }
+    catch { alert("Failed to load users"); }
+    finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  useEffect(() => { fetchUsers(); }, []);
 
-  // DELETE USER
+  // DELETE user via admin route
   const deleteUser = async (id) => {
-  try {
-    await api.delete(`/users/${id}`);
-    setUsers(users.filter((u) => u.id !== id));
-  } catch (error) {
-    console.error(error);
-    alert("Delete failed");
-  }
-};
+    if (!window.confirm("Delete this user?")) return;
+    try { await api.delete(`/admin/users/${id}`); setUsers(users.filter((u) => u.id !== id)); }
+    catch { alert("Delete failed"); }
+  };
 
-  // BLOCK / UNBLOCK
- const toggleBlock = async (user) => {
-  try {
-    const isBlocked = !user.isBlocked;
+  // BLOCK/UNBLOCK via admin route
+  const toggleBlock = async (user) => {
+    try {
+      const isBlocked = !user.isBlocked;
+      await api.patch(`/admin/users/${user.id}`, { isBlocked });
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isBlocked } : u)));
+    } catch { alert("Action failed"); }
+  };
 
-    await api.patch(`/users/${user.id}`, { isBlocked });
-
-    setUsers(prev =>
-      prev.map(u =>
-        u.id === user.id ? { ...u, isBlocked } : u
-      )
-    );
-  } catch {
-    alert("Action failed");
-  }
-};
-
-  // CHANGE TIER
+  // CHANGE TIER via admin route
   const changeTier = async (user, tier) => {
     try {
-      await api.patch(`/users/${user.id}`, { tier });
-
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.id === user.id ? { ...u, tier } : u
-        )
-      );
-    } catch (error) {
-      console.error(error);
-      alert("Tier update failed");
-    }
+      await api.patch(`/admin/users/${user.id}`, { tier });
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, tier } : u)));
+    } catch { alert("Tier update failed"); }
   };
 
   return (
     <div className="users">
       <h2>Users</h2>
 
-      {loading ? (
-        <p>Loading users...</p>
-      ) : (
+      {loading ? <p>Loading users...</p> : (
         <table>
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Tier</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
+            <tr><th>ID</th><th>Username</th><th>Email</th><th>Tier</th><th>Status</th><th>Action</th></tr>
           </thead>
-
           <tbody>
             {users.length === 0 ? (
-              <tr>
-                <td colSpan="6">No users found</td>
+              <tr><td colSpan="6">No users found</td></tr>
+            ) : users.map((u) => (
+              <tr key={u.id}>
+                <td>{u.id}</td>
+                <td>{u.username}</td>
+                <td>{u.email}</td>
+                <td>
+                  <select value={u.tier || "Bronze"} onChange={(e) => changeTier(u, e.target.value)}>
+                    <option>Bronze</option><option>Gold</option><option>Diamond</option>
+                  </select>
+                </td>
+                <td>{u.isBlocked ? <span className="blocked">Blocked</span> : <span className="active">Active</span>}</td>
+                <td>
+                  <button onClick={() => setViewUser(u)}>View</button>
+                  <button onClick={() => toggleBlock(u)}>{u.isBlocked ? "Unblock" : "Block"}</button>
+                  <button onClick={() => deleteUser(u.id)}>Delete</button>
+                </td>
               </tr>
-            ) : (
-              users.map((u) => (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td>{u.username}</td>
-                  <td>{u.email}</td>
-
-                  {/* Tier */}
-                  <td>
-                    <select
-                      value={u.tier || "Bronze"}
-                      onChange={(e) =>
-                        changeTier(u, e.target.value)
-                      }
-                    >
-                      <option>Bronze</option>
-                      <option>Gold</option>
-                      <option>Diamond</option>
-                    </select>
-                  </td>
-
-                  {/* Status */}
-                  <td>
-                    {u.isBlocked ? (
-                      <span className="blocked">Blocked</span>
-                    ) : (
-                      <span className="active">Active</span>
-                    )}
-                  </td>
-
-                  {/* Actions */}
-                  <td>
-                    <button onClick={() => setViewUser(u)}>
-                      View
-                    </button>
-
-                    <button onClick={() => toggleBlock(u)}>
-                      {u.isBlocked ? "Unblock" : "Block"}
-                    </button>
-
-                    <button onClick={() => deleteUser(u.id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       )}
 
-      {/*  VIEW MODAL  */}
       {viewUser && (
         <div className="modal" onClick={() => setViewUser(null)}>
-          <div
-            className="modal-box"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <h3>User Details</h3>
-
             <p><strong>ID:</strong> {viewUser.id}</p>
             <p><strong>Username:</strong> {viewUser.username}</p>
             <p><strong>Email:</strong> {viewUser.email}</p>
             <p><strong>Tier:</strong> {viewUser.tier || "Bronze"}</p>
-         
             <div className="modal-actions">
-              <button onClick={() => setViewUser(null)}>
-                Close
-              </button>
+              <button onClick={() => setViewUser(null)}>Close</button>
             </div>
           </div>
         </div>

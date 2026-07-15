@@ -2,11 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const createToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-};
+const createToken = (userId) =>
+  jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 const userResponse = (user) => ({
   id: user._id.toString(),
@@ -26,6 +23,7 @@ exports.register = async (req, res) => {
     const displayName = name || username;
 
     if (!displayName || !email || !password) {
+
       return res.status(400).json({ message: "Name, email, and password are required" });
     }
 
@@ -54,6 +52,8 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+     console.log("1. Login API called");
+      console.log("req.body =", req.body);
     const { email, password } = req.body;
 
     if (!email || !password ) {

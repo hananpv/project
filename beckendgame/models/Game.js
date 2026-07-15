@@ -15,6 +15,22 @@ const gameSchema = new mongoose.Schema(
     },
     category: String,
     description: String,
+    developer: String,
+    year: Number,
+    rating: {
+      type: Number,
+      min: 0,
+      max: 10,
+    },
+    platform: String,
+    isNew: {
+      type: Boolean,
+      default: false,
+    },
+    isTopSeller: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -28,7 +28,7 @@ import Profile from "./pages/Profile";
 
 //  Admin imports
 import AdminLayout from "./admin/AdminLayout";
-import Dashboard from "./admin/pages/Dashboard.jsx ";
+import Dashboard from "./admin/pages/Dashboard";
 import Products from "./admin/pages/Products";
 import Orderss from "./admin/pages/Orderss";
 import Users from "./admin/pages/Users";

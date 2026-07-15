@@ -24,13 +24,26 @@ exports.addToCart = async (req, res) => {
       return res.status(404).json({ message: "Game not found" });
     }
 
-    const item = await Cart.findOneAndUpdate(
-      { userId: req.user.id, gameId },
-      { $inc: { quantity: Number(quantity) || 1 } },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
-    ).populate("gameId");
+   const existingItem = await Cart.findOne({
+  userId: req.user.id,
+  gameId,
+});
 
-    res.status(201).json(item);
+if (existingItem) { 
+  return res.status(400).json({
+    message: "Game already in cart",
+  });
+}
+
+const item = await Cart.create({
+  userId: req.user.id,
+  gameId,
+  quantity,
+});
+
+  await item.populate("gameId");
+
+  res.status(201).json(item);
   } catch (err) {
     res.status(500).json({ message: "Failed to add to cart", error: err.message });
   }

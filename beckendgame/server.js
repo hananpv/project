@@ -8,19 +8,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
-console.log("RUNNING BACKEND:", __dirname);
 app.use(cors());
 app.use(express.json());
-app.use(
-  "/products",
-  express.static(path.join(__dirname, "../game/public/products"))
-);
+app.use( "/products",express.static(path.join(__dirname, "../game/public/products")));
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/games", require("./routes/gameRoutes"));
 app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/wishlist", require("./routes/wishlistRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
-app.use("/api/auth", require("./routes/authRoutes"));
 
 app.get("/", (req, res) => {
   res.json({ message: "Game store backend is running" });
