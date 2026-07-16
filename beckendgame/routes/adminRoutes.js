@@ -2,19 +2,12 @@ const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
 const isAdmin = require("../middleware/isAdminMiddleware");
 const upload = require("../middleware/uploadMiddleware");
-const {
-  getStats,
-  getAllOrders,
-  updateOrderStatus,
-  getProducts,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-  uploadProductImage,
-  getUsers,
-  updateUser,
-  deleteUser,
-} = require("../controllers/adminController");
+
+// Import separated controllers
+const { getStats } = require("../controllers/adminStatsController");
+const { getAllOrders, updateOrderStatus } = require("../controllers/adminOrderController");
+const { getProducts, addProduct, updateProduct, deleteProduct, uploadProductImage } = require("../controllers/adminProductController");
+const { getUsers, updateUser, deleteUser } = require("../controllers/adminUserController");
 
 const router = express.Router();
 

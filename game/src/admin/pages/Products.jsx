@@ -7,10 +7,10 @@ const EMPTY = { title: "", developer: "", year: "", price: "", rating: "", categ
 
 function Products() {
   const [products, setProducts] = useState([]);
-  const [modal, setModal] = useState(null);
+  const [modal, setModal] = useState(null); // null = closed, { mode, data }
   const [uploading, setUploading] = useState(false);
 
-  // FETCH from admin route
+  // FETCH
   const fetchProducts = async () => {
     try {
       const res = await api.get("/admin/products");
@@ -21,7 +21,7 @@ function Products() {
 
   useEffect(() => { fetchProducts(); }, []);
 
-  // SAVE (add or update) via admin route
+  // SAVE (add or update)
   const save = async () => {
     if (!modal) return;
     const { mode, data } = modal;
@@ -38,14 +38,14 @@ function Products() {
     } catch (err) { toast.error(err.response?.data?.message || "Save failed"); }
   };
 
-  // DELETE via admin route
+  // DELETE
   const remove = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try { await api.delete(`/admin/products/${id}`); toast.success("Deleted"); fetchProducts(); }
     catch { toast.error("Delete failed"); }
   };
 
-  // IMAGE UPLOAD via admin route
+  // IMAGE UPLOAD
   const uploadImage = async (e) => {
     const file = e.target.files[0];
     if (!file || !modal) return;
@@ -60,6 +60,7 @@ function Products() {
     finally { setUploading(false); }
   };
 
+  // Update modal field
   const set = (field, value) => setModal({ ...modal, data: { ...modal.data, [field]: value } });
 
   return (
@@ -88,6 +89,7 @@ function Products() {
         </tbody>
       </table>
 
+      {/* SINGLE MODAL for Add + Edit */}
       {modal && (
         <div className="modal">
           <div className="modal-box large">
