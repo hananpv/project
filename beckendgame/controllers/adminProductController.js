@@ -1,6 +1,5 @@
 const Game = require("../models/Game");
 
-// GET /api/admin/products
 exports.getProducts = async (req, res) => {
   try {
     const games = await Game.find().sort({ createdAt: -1 });
@@ -10,7 +9,7 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// POST /api/admin/products
+
 exports.addProduct = async (req, res) => {
   try {
     const game = await Game.create(req.body);
@@ -20,7 +19,10 @@ exports.addProduct = async (req, res) => {
   }
 };
 
-// PUT /api/admin/products/:id
+
+
+
+
 exports.updateProduct = async (req, res) => {
   try {
     const game = await Game.findByIdAndUpdate(req.params.id, req.body, {
@@ -34,7 +36,10 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// DELETE /api/admin/products/:id
+
+
+
+
 exports.deleteProduct = async (req, res) => {
   try {
     const game = await Game.findByIdAndDelete(req.params.id);
@@ -45,7 +50,7 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// POST /api/admin/products/upload
+
 exports.uploadProductImage = async (req, res) => {
   try {
     if (!req.file) {

@@ -2,7 +2,6 @@ const User = require("../models/User");
 const Game = require("../models/Game");
 const Order = require("../models/Order");
 
-// GET /api/admin/stats
 exports.getStats = async (req, res) => {
   try {
     const [usersCount, productsCount, stats] = await Promise.all([
@@ -11,9 +10,12 @@ exports.getStats = async (req, res) => {
       Order.aggregate([
         {
           $facet: {
+            
             revenue: [
               { $group: { _id: null, totalRevenue: { $sum: "$total" } } },
             ],
+
+
             revenueData: [
               {
                 $group: {
@@ -24,10 +26,14 @@ exports.getStats = async (req, res) => {
               { $sort: { _id: 1 } },
               { $limit: 14 },
             ],
+
+
             ordersByStatus: [
               { $group: { _id: "$orderStatus", count: { $sum: 1 } } },
               { $project: { _id: 0, status: "$_id", count: 1 } },
             ],
+
+
             topGames: [
               { $unwind: "$items" },
               { $group: { _id: "$items.title", sales: { $sum: "$items.quantity" } } },
@@ -35,6 +41,8 @@ exports.getStats = async (req, res) => {
               { $limit: 8 },
               { $project: { _id: 0, name: "$_id", sales: 1 } },
             ],
+
+
             totalOrders: [{ $count: "count" }],
           },
         },

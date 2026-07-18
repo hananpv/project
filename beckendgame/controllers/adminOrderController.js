@@ -1,6 +1,6 @@
 const Order = require("../models/Order");
 
-// GET /api/admin/orders
+
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
@@ -12,7 +12,7 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-// PATCH /api/admin/orders/:id/status
+
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { orderStatus } = req.body;

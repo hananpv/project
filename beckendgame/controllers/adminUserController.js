@@ -12,7 +12,6 @@ const userResponse = (user) => ({
   createdAt: user.createdAt,
 });
 
-// GET /api/admin/users
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
@@ -22,7 +21,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-// PATCH /api/admin/users/:id
+
 exports.updateUser = async (req, res) => {
   try {
     const { name, username, email, isBlocked, tier, role } = req.body;
@@ -46,7 +45,6 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// DELETE /api/admin/users/:id
 exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);

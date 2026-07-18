@@ -2,7 +2,6 @@ const User = require("../models/User");
 
 module.exports = async (req, res, next) => {
   try {
-    // req.user is already set by authMiddleware
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Authentication required" });
     }
